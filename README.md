@@ -21,5 +21,6 @@ Features:
 
 How to use:
 - Install on a Linux-based operating system.
+- locate the `Testng.sh` file to a directory in which you have saved the public keys
 - `chmod +x Testing.sh`
 - `./Testing.sh`
