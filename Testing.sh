@@ -21,7 +21,6 @@ if [ "$n" = "0" ]; then
     done
 
     read -p $'\nEnter key numbers (space-separated): ' -a numbers
-
     selected_keys=()
     for num in "${numbers[@]}"; do
         index=$((num - 1))
@@ -73,8 +72,8 @@ echo "$final_text"
     for aID in "${!selected_keys[@]}"; do
             echo "${selected_keys[aID]}"
             echo "$final_text" | gpg --armour -e -r "${selected_keys[aID]}" > txt.gpg
-            read -p "Name of file for "${selected_keys[aID]}" (don't repeat the same name): " name
-            hexdump -v -e '1/1 "%02x"' txt.gpg | rev > $name.txt
+            #read -p "Name of file for "${selected_keys[aID]}" (don't repeat the same name): " name
+            hexdump -v -e '1/1 "%02x"' txt.gpg | rev
             shred txt.gpg
     done
 elif [ "$n" = "1" ]; then
@@ -86,11 +85,12 @@ elif [ "$n" = "1" ]; then
             shred media
     done
 elif [ "$n" = "2" ]; then
-    read -p "Message (m) / Image (i) / Video (v)?" mi
-    ls
-    read -p "File name: " e
+    read -p "Message (m) / Image (i) / Video (v)? " mi
+    #ls
+    #read -p "File name: " e
         if [ $mi = "m" ]; then
-            perl -e 'print pack("H*", $ARGV[0])' $(cat $e.txt | rev) > output.gpg
+            read -p "Paste dump: " p_d
+            perl -e 'print pack("H*", $ARGV[0])' $(echo $p_d | rev) > output.gpg
             gpg -d output.gpg
         elif [ $mi = "i" ]; then
             gpg -d $e.gpg > $e
@@ -102,6 +102,10 @@ elif [ "$n" = "2" ]; then
             echo "Wrong input, exitting."
             exit
         fi
+else
+    exit
+fi
+
 else
     exit
 fi
